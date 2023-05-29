@@ -1,10 +1,20 @@
 from fastapi import FastAPI
 from InstructorEmbedding import INSTRUCTOR
 import logging
-from schemas.EmbassPayload import EmbassPayload
-from utils.pair_sentences_with_instruction import (
-    pair_sentences_with_instruction
-)
+from typing import List, Optional
+from pydantic import BaseModel
+
+
+class EmbassPayload(BaseModel):
+    texts: List[str]
+    instruction: Optional[str] = "Represent the query for retrieval"
+
+
+def pair_sentences_with_instruction(sentences: List[str],
+                                    instruction: Optional[str] = "Represent the query for retrieval") -> List[List[str]]:
+    paired_sentences = [[sentence, instruction] for sentence in sentences]
+    return paired_sentences
+
 
 app = FastAPI()
 
@@ -15,7 +25,7 @@ logging.basicConfig(level=logging.INFO)
 async def startup_event():
     logging.info("Loading Instructor Embedding Model")
     global model
-    model = INSTRUCTOR('hkunlp/instructor-large')
+    model = INSTRUCTOR('instructor-large')
     logging.info("Instructor Embedding Model Loaded")
 
 
