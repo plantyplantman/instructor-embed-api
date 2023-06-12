@@ -1,0 +1,2 @@
+Configure docker & script to download model from huggingface on startup_event.
+

@@ -5,11 +5,6 @@ from typing import List, Optional
 from pydantic import BaseModel
 
 
-class EmbassPayload(BaseModel):
-    texts: List[str]
-    instruction: Optional[str] = "Represent the query for retrieval"
-
-
 def pair_sentences_with_instruction(sentences: List[str],
                                     instruction: Optional[str] = "Represent the query for retrieval") -> List[List[str]]:
     paired_sentences = [[sentence, instruction] for sentence in sentences]
@@ -32,6 +27,11 @@ async def startup_event():
 @app.get("/")
 def root():
     return {"Hello": "World"}
+
+
+class EmbassPayload(BaseModel):
+    texts: List[str]
+    instruction: Optional[str] = "Represent the query for retrieval"
 
 
 @app.post("/embed")
